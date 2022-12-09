@@ -6,4 +6,4 @@ There are different pseudorandom number generator implementations but since xors
 
 - Works only with unsigned 32 bits integer
 
-This is almost identical to one that i implemented in my internship except that it was implemented in C#.
+This is almost identical to one that i implemented in my internship.
