@@ -9,7 +9,9 @@ The generator is designed to work with unsigned 32-bit integers. To generate a n
 #include "random_number_generator.h"
 
 uint32_t seed = 1239131;
-uint32_t next = xor_shift(seed) //
+uint32_t next = xor_shift(seed) 
+uint32_t prev_to_next = revert(next) // 1239131
+
 
 ```
 
