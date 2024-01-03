@@ -14,11 +14,8 @@ uint32_t prev_to_next = revert(next) // 1239131
 
 
 ```
-
-## Implementation Details
-Xorshift Algorithm: This PRNG uses a chain of xorshifts, specifically 13 left shifts, 17 right shifts, and 4 left shifts.
-32-bit Limitation: The implementation is designed to work only with unsigned 32-bit integers.
-Recommendation
+  
+## Recommendation
 While this xorshift-based PRNG is suitable for various non-cryptographic applications, such as simulations or game development, it is crucial to understand its limitations. Avoid using this generator for cryptographic purposes where the reversibility of the sequence may pose a security risk.
 
 Feel free to adapt and use this PRNG according to your needs, keeping in mind its intended use cases and limitations.
