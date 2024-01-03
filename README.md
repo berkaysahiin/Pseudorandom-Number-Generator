@@ -1,9 +1,22 @@
-# Pseudorandom Number Generator
+## Pseudorandom Number Generator (Xorshift)
 
-This is a pseudorandom number generator implemented using xorshift. Xorshift generators basically bitwise shift the number and xor that number with itself. Different chain of xorshifts can be used, i used 13 left, 17 right, 4 left shift implementation. 
+This pseudorandom number generator (PRNG) is implemented using the xorshift algorithm. Xorshift generators operate by bitwise shifting a number and then performing an exclusive OR (XOR) operation on that number with itself. In this specific implementation, a chain of xorshifts is applied: 13 left shifts, 17 right shifts, and 4 left shifts.
 
-There are different pseudorandom number generator implementations but since xorshift generators can be reverted, i also implemented get_prev() function which basically returns the previous random generated number. For this reason, I do not recommend using it for encryption since it is easily reverted.
+## Usage
+The generator is designed to work with unsigned 32-bit integers. To generate a new pseudorandom number, simply call the next() function. Additionally, a get_prev() function is provided, allowing retrieval of the previously generated random number.
 
-- Works only with unsigned 32 bits integer
+```C
+#include "random_number_generator.h"
 
-This is almost identical to one that i implemented in my internship.
+uint32_t seed = 1239131;
+uint32_t next = xor_shift(seed) //
+
+```
+
+## Implementation Details
+Xorshift Algorithm: This PRNG uses a chain of xorshifts, specifically 13 left shifts, 17 right shifts, and 4 left shifts.
+32-bit Limitation: The implementation is designed to work only with unsigned 32-bit integers.
+Recommendation
+While this xorshift-based PRNG is suitable for various non-cryptographic applications, such as simulations or game development, it is crucial to understand its limitations. Avoid using this generator for cryptographic purposes where the reversibility of the sequence may pose a security risk.
+
+Feel free to adapt and use this PRNG according to your needs, keeping in mind its intended use cases and limitations.
