@@ -1,8 +1,9 @@
 #include <stdint.h>
 
-/* Macro definitions for bit manipulation */
-#define SET_BIT(target, index) (target |= (1U << (index)))
-#define CLEAR_BIT(target, index) (target &= ~(1U << (index)))
+/* Shift constants */
+#define SHIFT_13 13
+#define SHIFT_17 17
+#define SHIFT_4 4
 
 /* Random number generator structure */
 typedef struct {
@@ -19,9 +20,9 @@ uint32_t revert(uint32_t value);
 
 /* --------------PRIVATE-------------------*/
 uint32_t revert_bits_shift(uint32_t xorshiftedValue, int shift, int is_left);
-void set_bit(uint32_t* target, int val, int index);
-int get_bit(const uint32_t target, int index);
-int xor(const int b1, const int b2);
+inline void set_bit(uint32_t* target, int val, int index);
+inline int get_bit(const uint32_t target, int index);
+inline int xor_bits(const int b1, const int b2);
 
 /* --------------------------------------------------------------------------------- */
 
@@ -57,16 +58,16 @@ uint32_t get_prev_range(random_number_generator* rng, int upper_bound) {
 }
 
 uint32_t xor_shift(uint32_t value) {
-    value ^= value << 13;
-    value ^= value >> 17;
-    value ^= value << 4;
+    value ^= value << SHIFT_13;
+    value ^= value >> SHIFT_17;
+    value ^= value << SHIFT_4;
     return value;
 }
 
 uint32_t revert(uint32_t value) {
-    value = revert_bits_shift(value, 4, 1);   // 4-bit left shift revert
-    value = revert_bits_shift(value, 17, 0);  // 17-bit right shift revert
-    value = revert_bits_shift(value, 13, 1);  // 13-bit left shift revert
+    value = revert_bits_shift(value, SHIFT_4, 1);   
+    value = revert_bits_shift(value, SHIFT_17, 0); 
+    value = revert_bits_shift(value, SHIFT_13, 1);  
     return value;
 }
 
@@ -88,7 +89,7 @@ uint32_t revert_bits_shift(uint32_t xorshiftedValue, int shift, int is_left) {
         }
       
         for (int i = shift; i < 32; i++) {
-            set_bit(&revertedValue, xor(get_bit(revertedValue, i - shift), get_bit(xorshiftedValue, i)), i);
+            set_bit(&revertedValue, xor_bits(get_bit(revertedValue, i - shift), get_bit(xorshiftedValue, i)), i);
         }
     } else {
       
@@ -97,7 +98,7 @@ uint32_t revert_bits_shift(uint32_t xorshiftedValue, int shift, int is_left) {
         }
 
         for (int i = 0; i < 32 - shift; i++) {
-            set_bit(&revertedValue, xor(get_bit(revertedValue, i + shift), get_bit(xorshiftedValue, i)), i);
+            set_bit(&revertedValue, xor_bits(get_bit(revertedValue, i + shift), get_bit(xorshiftedValue, i)), i);
         }
     }
 
@@ -108,9 +109,9 @@ uint32_t revert_bits_shift(uint32_t xorshiftedValue, int shift, int is_left) {
 
 inline void set_bit(uint32_t* target, int val, int index) {
     if (val == 1) {
-        SET_BIT(*target, index);
+        *target |= (1U << index);  
     } else {
-        CLEAR_BIT(*target, index);
+        *target &= ~(1U << index); 
     }
 }
 
@@ -118,6 +119,6 @@ inline int get_bit(const uint32_t target, int index) {
     return (target & (1 << index)) != 0;
 }
 
-inline int xor(const int b1, const int b2) {
+inline int xor_bits(const int b1, const int b2) {
     return !(b1 == b2);
 }
